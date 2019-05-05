@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: {
+           equationNumbers: {  autoNumber: "AMS"  },
+           extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "color.js"]
+        }
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    ></script>
+  </head>
+  <body style="margin: 20px;">
+    <div>
+      <h2>Element</h2>
+      <p>
+        \[_{Z}^{A}{X}\]
+      </p>
+
+      <form method="post" action="">
+        <div class="form-group">
+          {% for field in form %}
+          <div class="input-group">
+            <label class="col-sm-1 col-form-label">
+              <span class="input-group-addon"> \( {{ field.name }} \) </span>
+            </label>
+            <div class="col-xs-2">
+              {{ field(class_="form-control" ,autocomplete="off") }}
+            </div>
+            <div class="col-xs-3">
+              {{ field.label }}
+            </div>
+            {% if field.errors %} {% for error in field.errors %}
+            <div class="col-xs-3">
+              <div style="color: red;">{{ error }}</div>
+            </div>
+            {% endfor %} {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+        <br />
+        <input type="submit" value="Compute" class="btn btn-lg btn-primary" />
+      </form>
+
+      {% if elements != [] %} {% for element in elements %}
+      <div>
+        <h2>Structura</h2>
+        <p>
+          \[{ ^{ {{ element["A"] }} }_{ {{ element["Z"] }} }
+          {{ element["Element"] }} }= \begin{cases}Z={{
+            element["Z"]
+          }}\begin{cases}{{ element["Z"] }} \: e^- & \\{{ element["Z"] }} \: p^+
+          & \end{cases} & \\N = A - Z \Rightarrow N = {{ element["A"] }} -
+          {{ element["Z"] }} = {{ element["A"] - element["Z"] }} \Rightarrow
+          {{ element["A"] - element["Z"] }} \: n^0 & \end{cases}\]
+        </p>
+      </div>
+
+      <div>
+        <h2>Raza</h2>
+        <p>
+          \[R_{0} = 1.45 * 10^{-15}m\] \[R_{ {{ element["Element"] }} } = R_{0}
+          * A^{1/3} = 1.45 * 10^{-15} * {{ element["A"] }}^{1/3} =
+          {{"{0:.5f}".format(1.45*(element['A']**(1/3)))}} * 10^{-15}m \]
+        </p>
+      </div>
+
+      <div>
+        <h2>Wleg,B,stabil/instabil</h2>
+        <p>\[W_{leg} = Z * m_{H} * c^2 + (A-Z)*m_{n} * c^2 - M_{A}*c^2\]</p>
+        <p>
+          \[W_{leg} = {{ element["Z"] }} * {{ mH }} * uc^2 + (
+          {{ element["A"] }} - {{ element["Z"] }} )* {{ mn }} * uc^2 -
+          {{ "{0:.5f}".format(element["u"]) }} *uc^2\]
+        </p>
+        <p>
+          \[W_{leg} = uc^2({{ "{0:.5f}".format(element["Z"] * mH) }} +
+          {{ "{0:.5f}".format((element["A"] - element["Z"]) * mn) }} -
+          {{ "{0:.5f}".format(element["u"]) }})\]
+        </p>
+        <p>
+          \[W_{leg} = uc^2({{
+            "{0:.5f}".format(
+              element["Z"] * mH +
+                (element["A"] - element["Z"]) * mn -
+                element["u"]
+            )
+          }})\]
+        </p>
+        <p>
+          \[W_{leg} =
+          {{
+            "{0:.5f}".format(
+              931.5 *
+                (element["Z"] * mH +
+                  (element["A"] - element["Z"]) * mn -
+                  element["u"])
+            )
+          }}MeV\]
+        </p>
+      </div>
+      <br></br>
+
+      <p>
+        \[B = \frac{W_{leg}}{A} \]
+      </p>
+      <p>
+          \[B = \frac{ {{
+            "{0:.5f}".format(
+              931.5 *
+                (element["Z"] * mH +
+                  (element["A"] - element["Z"]) * mn -
+                  element["u"])
+            )
+          }} }{ {{element['A']}} } \]
+      </p>
+
+      <p>
+          \[B ={ {{
+            "{0:.5f}".format((931.5 * (element["Z"] * mH +(element["A"] - element["Z"]) * mn - element["u"])) / element['A'])}}  \:  m  \:  } 
+            
+            
+            {%if (931.5 * (element["Z"] * mH +(element["A"] - element["Z"]) * mn - element["u"])) / element['A'] >= 7.8 %}
+              stabil
+            {%else%}
+              instabil
+            {%endif%}
+            
+            
+            
+            \]
+      </p>
+
+      {% endfor %}
+
+      <!-- <table border="1">
+          {% for element in elements %}
+          <tr>
+            <td>{{ element["Z"] }}</td>
+            <td>{{ element["A"] }}</td>
+            <td>{{ element["Element"] }}</td>
+            <td>{{ element["u"] }}</td>
+          </tr>
+          {% endfor %}
+        </table> -->
+
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>MathJax example</title>
+    <script src="https://unpkg.com/mathjs@5.8.0/dist/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <h2>Energia de legatura nucleara</h2>
+    <p>
+      \[W_{leg} = Zm_{H} * C^2 + (A-Z) * C^2 - M_{A}*C^2\]
+    </p>
+    <h2>Energia de legatura pe nucleu</h2>
+    <p>
+      \[B = \frac{W_{leg}}{A} \]
+    </p>
+    <p>
+      \[B \geq 7.9 \rightarrow stabil\] \[B \simeq 7.5 \rightarrow instabil\]
+    </p>
+    <h2>Raza nucleului</h2>
+    <p>
+      \[R_{X} = R_{0} * A^{1/3}\]
+    </p>
+    <p>
+      \[R_{0} = 1.45 * 10^{-15}m\]
+    </p>
+    <h2>Element</h2>
+    <p>
+      \[_{Z}^{A}{X}\]
+    </p>
+  </body>
+</html>
